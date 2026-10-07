@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>SENAI Conecta</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="cabecalho">
+
+        <div class="logo">
+            SENAI CONECTA
+        </div>
+
+        <div class="pesquisa">
+
+            <input
+                type="text"
+                id="pesquisaUsuario"
+                placeholder="Pesquisar usuário..."
+            >
+
+            <button onclick="pesquisarUsuario()">
+                Pesquisar
+            </button>
+
+        </div>
+
+        <div
+            class="area-usuario"
+            id="areaUsuario"
+        >
+            <button onclick="abrirLogin()">
+                Entrar
+            </button>
+
+            <button onclick="abrirCadastro()">
+                Cadastrar
+            </button>
+        </div>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <div
+        id="mensagemGeral"
+        class="mensagem"
+    ></div>
+
+
+    <section class="titulo">
+
+        <h1>Publicações</h1>
+
+        <p>
+            Confira as publicações mais recentes da SENAI Conecta.
+        </p>
+
+    </section>
+
+
+    <section id="feed">
+
+        <div class="carregando">
+            Carregando publicações...
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    <strong>SENAI Conecta</strong>
+
+    <p>
+        © 2026-2027 SENAI Conecta
+    </p>
+
+</footer>
+
+
+<!-- LOGIN -->
+
+<div
+    id="modalLogin"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar"
+            onclick="fecharModal('modalLogin')"
+        >
+            ×
+        </button>
+
+        <h2>Login</h2>
+
+        <form onsubmit="fazerLogin(event)">
+
+            <label>E-mail</label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                required
+            >
+
+            <label>Senha</label>
+
+            <input
+                type="password"
+                id="loginSenha"
+                required
+            >
+
+            <div id="mensagemLogin"></div>
+
+            <div class="botoes-modal">
+
+                <button
+                    type="button"
+                    onclick="fecharModal('modalLogin')"
+                >
+                    Cancelar
+                </button>
+
+                <button type="submit">
+                    Entrar
+                </button>
+
+            </div>
+
+        </form>
+
+        <p class="link-modal">
+
+            Não possui conta?
+
+            <button onclick="abrirCadastro()">
+                Cadastre-se
+            </button>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- CADASTRO -->
+
+<div
+    id="modalCadastro"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar"
+            onclick="fecharModal('modalCadastro')"
+        >
+            ×
+        </button>
+
+        <h2>Criar conta</h2>
+
+        <form
+            id="formCadastro"
+            onsubmit="fazerCadastro(event)"
+        >
+
+            <label>Nome</label>
+
+            <input
+                type="text"
+                name="nome"
+                required
+            >
+
+            <label>Username</label>
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Ex.: christian"
+                required
+            >
+
+            <label>E-mail</label>
+
+            <input
+                type="email"
+                name="email"
+                required
+            >
+
+            <label>Senha</label>
+
+            <input
+                type="password"
+                name="senha"
+                minlength="6"
+                required
+            >
+
+            <label>Foto de perfil</label>
+
+            <input
+                type="file"
+                name="foto"
+                accept="image/*"
+            >
+
+            <div id="mensagemCadastro"></div>
+
+            <div class="botoes-modal">
+
+                <button
+                    type="button"
+                    onclick="fecharModal('modalCadastro')"
+                >
+                    Cancelar
+                </button>
+
+                <button type="submit">
+                    Cadastrar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PUBLICAÇÃO -->
+
+<div
+    id="modalPublicacao"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar"
+            onclick="fecharModal('modalPublicacao')"
+        >
+            ×
+        </button>
+
+        <h2>Nova publicação</h2>
+
+        <form
+            id="formPublicacao"
+            onsubmit="publicar(event)"
+        >
+
+            <label>Texto</label>
+
+            <textarea
+                name="texto"
+                placeholder="O que você está pensando?"
+                required
+            ></textarea>
+
+            <label>Imagem</label>
+
+            <input
+                type="file"
+                name="imagem"
+                accept="image/*"
+            >
+
+            <div id="mensagemPublicacao"></div>
+
+            <div class="botoes-modal">
+
+                <button
+                    type="button"
+                    onclick="fecharModal('modalPublicacao')"
+                >
+                    Cancelar
+                </button>
+
+                <button type="submit">
+                    Publicar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- CONFIRMAÇÃO -->
+
+<div
+    id="modalExcluir"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <h2>Excluir publicação</h2>
+
+        <p>
+            Deseja realmente excluir esta publicação?
+        </p>
+
+        <input
+            type="hidden"
+            id="idExcluir"
+        >
+
+        <div class="botoes-modal">
+
+            <button
+                type="button"
+                onclick="fecharModal('modalExcluir')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                class="botao-perigo"
+                onclick="excluirPublicacao()"
+            >
+                Excluir
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PESQUISA -->
+
+<div
+    id="modalPesquisa"
+    class="modal"
+>
+
+    <div class="modal-conteudo grande">
+
+        <button
+            class="fechar"
+            onclick="fecharModal('modalPesquisa')"
+        >
+            ×
+        </button>
+
+        <h2>Resultados da pesquisa</h2>
+
+        <div id="resultadosPesquisa"></div>
+
+    </div>
+
+</div>
+
+
+<!-- PERFIL -->
+
+<div
+    id="modalPerfil"
+    class="modal"
+>
+
+    <div class="modal-conteudo grande">
+
+        <button
+            class="fechar"
+            onclick="fecharModal('modalPerfil')"
+        >
+            ×
+        </button>
+
+        <div id="perfilConteudo"></div>
+
+    </div>
+
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+
+</html>
