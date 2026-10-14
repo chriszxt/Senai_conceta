@@ -1,4 +1,3 @@
-```php
 <?php
 session_start();
 require_once "config/database.php";
@@ -41,15 +40,18 @@ if ($rota === "cadastro" && $metodo === "POST") {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL))
         resposta(["sucesso" => false, "mensagem" => "Digite um e-mail válido."]);
 
+    if (!preg_match('/^[A-Za-z0-9_.]{3,30}$/', $username))
+        resposta(["sucesso" => false, "mensagem" => "O username deve ter de 3 a 30 caracteres (letras, números, ponto ou _), sem espaços."]);
+
     $stmt = $conn->prepare("SELECT username, email FROM usuario WHERE username = ? OR email = ?");
     $stmt->bind_param("ss", $username, $email);
     $stmt->execute();
     $resultado = $stmt->get_result();
 
     while ($u = $resultado->fetch_assoc()) {
-        if ($u["username"] === $username)
+        if (strcasecmp($u["username"], $username) === 0)
             resposta(["sucesso" => false, "mensagem" => "Esse username já está em uso."]);
-        if ($u["email"] === $email)
+        if (strcasecmp($u["email"], $email) === 0)
             resposta(["sucesso" => false, "mensagem" => "Esse e-mail já está cadastrado."]);
     }
 
@@ -260,4 +262,3 @@ if ($rota === "perfil" && $metodo === "GET") {
 }
 
 resposta(["sucesso" => false, "mensagem" => "Rota não encontrada."]);
-```
